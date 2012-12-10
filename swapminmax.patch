@@ -1,0 +1,71 @@
+diff -ru xorg-x11-drv-mtev-0.1.13/src/mtouch.h xorg-x11-drv-mtev-0.1.13-swapminmax/src/mtouch.h
+--- xorg-x11-drv-mtev-0.1.13/src/mtouch.h	2010-12-07 00:01:31.000000000 +0100
++++ xorg-x11-drv-mtev-0.1.13-swapminmax/src/mtouch.h	2012-01-23 20:21:11.765606314 +0100
+@@ -70,6 +70,11 @@
+ 	bool invert_y;
+ 	bool swap_xy;
+ 	struct mtdev dev;
++	
++	int min_x;
++	int max_x;
++	int min_y;
++	int max_y;
+ };
+ 
+ int mtouch_configure(struct mtev_mtouch *mt, int fd);
+Only in xorg-x11-drv-mtev-0.1.13-swapminmax/src: mtouch.h~
+diff -ru xorg-x11-drv-mtev-0.1.13/src/multitouch.c xorg-x11-drv-mtev-0.1.13-swapminmax/src/multitouch.c
+--- xorg-x11-drv-mtev-0.1.13/src/multitouch.c	2010-12-07 00:01:31.000000000 +0100
++++ xorg-x11-drv-mtev-0.1.13-swapminmax/src/multitouch.c	2012-01-23 20:20:06.151140841 +0100
+@@ -176,10 +176,24 @@
+ 			case 0:
+ 				min = mt->caps.abs_position_x.minimum;
+ 				max = mt->caps.abs_position_x.maximum;
++				if (mt->swap_xy) {
++					mt->min_y = min;
++					mt->max_y = max;
++				} else {
++					mt->min_x = min;
++					mt->max_x = max;
++				}
+ 				break;
+ 			case 1:
+ 				min = mt->caps.abs_position_y.minimum;
+ 				max = mt->caps.abs_position_y.maximum;
++				if (mt->swap_xy) {
++					mt->min_x = min;
++					mt->max_x = max;
++				} else {
++					mt->min_y = min;
++					mt->max_y = max;
++				}
+ 				break;
+ 			case 2:
+ 				min = mt->caps.abs_touch_major.minimum;
+@@ -275,20 +289,18 @@
+ 			x = tp->position_x;
+ 			y = tp->position_y;
+ 
+-			if (mt->invert_x)
+-				x = mt->caps.abs_position_x.maximum - x +
+-					mt->caps.abs_position_x.minimum;
+-
+-			if (mt->invert_y)
+-				y = mt->caps.abs_position_y.maximum - y
+-					+ mt->caps.abs_position_y.minimum;
+-
+ 			if (mt->swap_xy) {
+ 				const int tmp = y;
+ 				y = x;
+ 				x = tmp;
+ 			}
+ 
++			if (mt->invert_x)
++				x = mt->max_x - x + mt->min_x;
++
++			if (mt->invert_y)
++				y = mt->max_y - y + mt->min_y;
++
+ 			valuators[valix++] = x;
+ 			valuators[valix++] = y;
+ 			valuators[valix++] = tp->touch_major;
