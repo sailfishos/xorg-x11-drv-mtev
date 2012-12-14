@@ -9,7 +9,7 @@ Description: |
     This is a xserver-xorg input driver for devices supporting Linux Multi-Touch protocol
 Sources:
     - "%{name}-%{version}.tar.gz"
-atches:
+Patches:
     - apis-match-for-xserver-1.10.1.patch
     - swapminmax.patch
     - rotation.patch

@@ -1,3 +1,6 @@
+* Fri Dec 14 2012 Carsten Munk <carsten.munk@jollamobile.com> - 0.1.13
+- Don't do a bad job at removing config files.
+
 * Wed Dec 10 2012 Carsten Munk <carsten.munk@jollamobile.com> - 0.1.13
 - Remove config files, they should be in hardware adaptation
 

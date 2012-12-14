@@ -15,11 +15,6 @@ Group:      System/X Hardware Support
 License:    GPLv2
 URL:        http://gitorious.org/xorg/xf86-input-mtev
 Source0:    %{name}-%{version}.tar.gz
-Source1:    60-cando-mtev.conf
-Source2:    70-sitronix-mtev.conf
-Source3:    80-Hanvon-mtev.conf
-Source4:    90-ILI-mtev.conf
-Source5:    91-ecss10ot3.conf
 Source100:  xorg-x11-drv-mtev.yaml
 Patch0:     apis-match-for-xserver-1.10.1.patch
 Patch1:     swapminmax.patch
@@ -67,12 +62,6 @@ rm -rf %{buildroot}
 %make_install
 
 # >> install post
-mkdir -p %{buildroot}/etc/X11/xorg.conf.d
-install -p -m 644 %{SOURCE1} %{buildroot}/etc/X11/xorg.conf.d
-install -p -m 644 %{SOURCE2} %{buildroot}/etc/X11/xorg.conf.d
-install -p -m 644 %{SOURCE3} %{buildroot}/etc/X11/xorg.conf.d
-install -p -m 644 %{SOURCE4} %{buildroot}/etc/X11/xorg.conf.d
-install -p -m 644 %{SOURCE5} %{buildroot}/etc/X11/xorg.conf.d
 # << install post
 
 
@@ -80,9 +69,4 @@ install -p -m 644 %{SOURCE5} %{buildroot}/etc/X11/xorg.conf.d
 %defattr(-,root,root,-)
 # >> files
 %(pkg-config xorg-server --variable=moduledir )/input/mtev.so
-%config  /etc/X11/xorg.conf.d/60-cando-mtev.conf
-%config  /etc/X11/xorg.conf.d/70-sitronix-mtev.conf
-%config  /etc/X11/xorg.conf.d/80-Hanvon-mtev.conf
-%config  /etc/X11/xorg.conf.d/90-ILI-mtev.conf
-%config  /etc/X11/xorg.conf.d/91-ecss10ot3.conf
 # << files
